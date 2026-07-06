@@ -38,8 +38,10 @@ public class SecurityConfig {
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**").permitAll()
-                        .requestMatchers("/api/dashboard/**").hasRole("MANAGER")
+                        .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/projects").hasAnyRole("MANAGER", "TEAM_MEMBER")
                         .requestMatchers("/api/projects/**").hasRole("MANAGER")
+                        .requestMatchers("/api/dashboard/**").hasRole("MANAGER")
+                        .requestMatchers("/api/ai/**").hasRole("MANAGER")
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
