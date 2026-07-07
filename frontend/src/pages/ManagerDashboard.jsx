@@ -6,9 +6,10 @@ import {
 } from 'recharts';
 import { 
   Users, CheckCircle2, AlertTriangle, Calendar, Filter, 
-  Search, Briefcase, FileSpreadsheet, Eye, Bot, RefreshCw
+  Search, Briefcase, FileSpreadsheet, Eye, Bot, RefreshCw, X
 } from 'lucide-react';
 import AiChatAssistant from '../components/AiChatAssistant';
+import Aurora from '../components/Aurora';
 
 export default function ManagerDashboard() {
   const [stats, setStats] = useState(null);
@@ -86,8 +87,8 @@ export default function ManagerDashboard() {
         status: filterStatus || null
       };
       
-      // If no specific date filter range is selected, default list should be reports for selectedWeek
-      if (!filterDateStart && !filterDateEnd && selectedWeek) {
+      // If no specific filters or dates are selected, default list to reports of selectedWeek
+      if (!filterMemberId && !filterProjectId && !filterStatus && !filterDateStart && !filterDateEnd && selectedWeek) {
         filters.startDate = selectedWeek;
         const range = getWeekRange(selectedWeek);
         filters.endDate = range.end;
@@ -147,39 +148,47 @@ export default function ManagerDashboard() {
 
   return (
     <div className="space-y-8">
-      
-      {/* Top Banner Row */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-3xl font-extrabold text-slate-800 dark:text-slate-100 tracking-tight font-display">
-            Team Activity Dashboard
+
+      {/* Top Banner Row with Aurora Animation */}
+      <div className="relative rounded-3xl p-6 md:p-8 shadow-md shadow-indigo-500/10 space-y-4 overflow-hidden transition-all duration-300 bg-slate-900 border border-slate-800 text-white min-h-[160px] flex flex-col md:flex-row md:items-center justify-between gap-6">
+        <Aurora 
+          colorStops={["#6366f1", "#4f46e5", "#a855f7"]}
+          amplitude={1.2}
+          blend={0.65}
+        />
+        
+        <div className="relative z-10 space-y-1">
+          <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight font-display text-white">
+            Team Activity Dashboard 🚀
           </h1>
-          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-            Real-time analytics, report compliance tracking, and conversational AI insights.
+          <p className="text-xs text-indigo-100 opacity-90 leading-relaxed max-w-2xl">
+            Analyze your team's weekly performance, track reports compliance in real time, and ask the AI Assistant for detailed sprint insights.
           </p>
         </div>
 
+
         {/* Selected Week Picker */}
-        <div className="flex items-center gap-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl px-4 py-2 shadow-sm self-start">
-          <Calendar className="w-4 h-4 text-slate-400" />
-          <span className="text-xs font-semibold text-slate-550 dark:text-slate-400">Week Start:</span>
+        <div className="relative z-10 flex items-center gap-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl px-4 py-2.5 shadow-sm self-start md:self-auto hover:bg-white/15 transition-all">
+          <Calendar className="w-4 h-4 text-indigo-200" />
+          <span className="text-xs font-semibold text-indigo-100">Week Start:</span>
           <input
             type="date"
             value={selectedWeek}
             onChange={(e) => setSelectedWeek(e.target.value)}
-            className="bg-transparent border-none text-xs text-slate-850 dark:text-slate-150 font-bold outline-none cursor-pointer"
+            className="bg-transparent border-none text-xs text-white font-bold outline-none cursor-pointer [color-scheme:dark]"
           />
         </div>
       </div>
+
 
       {/* 3 Metric Summary Cards */}
       {stats && (
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
           {/* Card 1: Compliance */}
-          <div className="bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800 rounded-3xl p-6 flex items-center justify-between shadow-sm">
+          <div className="bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800 rounded-3xl p-6 flex items-center justify-between shadow-premium">
             <div className="space-y-2">
               <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Report Compliance</p>
-              <h3 className="text-3xl font-black text-slate-850 dark:text-slate-100 font-display">
+              <h3 className="text-3xl font-black text-slate-800 dark:text-slate-100 font-display">
                 {stats.complianceRate.toFixed(0)}%
               </h3>
               <p className="text-[10px] text-slate-500 dark:text-slate-400">
@@ -192,13 +201,13 @@ export default function ManagerDashboard() {
           </div>
 
           {/* Card 2: Open Blockers */}
-          <div className="bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800 rounded-3xl p-6 flex items-center justify-between shadow-sm">
+          <div className="bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800 rounded-3xl p-6 flex items-center justify-between shadow-premium">
             <div className="space-y-2">
               <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Active Blockers</p>
-              <h3 className="text-3xl font-black text-slate-850 dark:text-slate-100 font-display">
+              <h3 className="text-3xl font-black text-slate-800 dark:text-slate-100 font-display">
                 {stats.openBlockersCount}
               </h3>
-              <p className="text-[10px] text-slate-550 dark:text-slate-400">
+              <p className="text-[10px] text-slate-500 dark:text-slate-400">
                 Open challenges flagged by team
               </p>
             </div>
@@ -208,13 +217,13 @@ export default function ManagerDashboard() {
           </div>
 
           {/* Card 3: Pending Count */}
-          <div className="bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800 rounded-3xl p-6 flex items-center justify-between shadow-sm">
+          <div className="bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800 rounded-3xl p-6 flex items-center justify-between shadow-premium">
             <div className="space-y-2">
               <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Pending Reports</p>
-              <h3 className="text-3xl font-black text-slate-850 dark:text-slate-100 font-display">
+              <h3 className="text-3xl font-black text-slate-800 dark:text-slate-100 font-display">
                 {stats.pendingCount}
               </h3>
-              <p className="text-[10px] text-slate-550 dark:text-slate-400">
+              <p className="text-[10px] text-slate-500 dark:text-slate-400">
                 Awaiting submissions this week
               </p>
             </div>
@@ -229,12 +238,12 @@ export default function ManagerDashboard() {
       {stats && (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Pie: Compliance Distribution */}
-          <div className="bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800 rounded-3xl p-6 shadow-sm flex flex-col justify-between min-h-[300px]">
+          <div className="bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800 rounded-3xl p-6 shadow-premium flex flex-col justify-between min-h-[300px]">
             <div>
-              <h3 className="font-bold text-sm text-slate-805 dark:text-slate-200 font-display uppercase tracking-wider">
+              <h3 className="font-bold text-sm text-slate-800 dark:text-slate-200 font-display uppercase tracking-wider">
                 Submission Ratio
               </h3>
-              <p className="text-[10px] text-slate-450 dark:text-slate-500 mt-1">Submitted vs Pending</p>
+              <p className="text-[10px] text-slate-400 dark:text-slate-500 mt-1">Submitted vs Pending</p>
             </div>
             <div className="h-44 w-full relative flex items-center justify-center">
               <ResponsiveContainer width="100%" height="100%">
@@ -259,7 +268,7 @@ export default function ManagerDashboard() {
                 <span className="text-xl font-black text-slate-800 dark:text-slate-100 font-display">
                   {stats.submittedCount}/{stats.totalMembers}
                 </span>
-                <p className="text-[9px] text-slate-450 uppercase font-semibold">Submitted</p>
+                <p className="text-[9px] text-slate-400 uppercase font-semibold">Submitted</p>
               </div>
             </div>
             <div className="flex justify-center gap-6 text-xs font-semibold">
@@ -275,12 +284,12 @@ export default function ManagerDashboard() {
           </div>
 
           {/* Bar: Tasks / Hours by Project */}
-          <div className="bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800 rounded-3xl p-6 shadow-sm flex flex-col justify-between min-h-[300px] lg:col-span-1">
+          <div className="bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800 rounded-3xl p-6 shadow-premium flex flex-col justify-between min-h-[300px] lg:col-span-1">
             <div>
-              <h3 className="font-bold text-sm text-slate-805 dark:text-slate-200 font-display uppercase tracking-wider">
+              <h3 className="font-bold text-sm text-slate-800 dark:text-slate-200 font-display uppercase tracking-wider">
                 Workload Distribution
               </h3>
-              <p className="text-[10px] text-slate-450 dark:text-slate-500 mt-1">Logged hours by project</p>
+              <p className="text-[10px] text-slate-400 dark:text-slate-500 mt-1">Logged hours by project</p>
             </div>
             <div className="h-48 w-full mt-2">
               {barData.length === 0 ? (
@@ -303,12 +312,12 @@ export default function ManagerDashboard() {
           </div>
 
           {/* Line/Area: Submission Trend */}
-          <div className="bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800 rounded-3xl p-6 shadow-sm flex flex-col justify-between min-h-[300px] lg:col-span-1">
+          <div className="bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800 rounded-3xl p-6 shadow-premium flex flex-col justify-between min-h-[300px] lg:col-span-1">
             <div>
-              <h3 className="font-bold text-sm text-slate-805 dark:text-slate-200 font-display uppercase tracking-wider">
+              <h3 className="font-bold text-sm text-slate-800 dark:text-slate-200 font-display uppercase tracking-wider">
                 Submission Trend
               </h3>
-              <p className="text-[10px] text-slate-450 dark:text-slate-500 mt-1">Weekly reports submitted over time</p>
+              <p className="text-[10px] text-slate-400 dark:text-slate-500 mt-1">Weekly reports submitted over time</p>
             </div>
             <div className="h-48 w-full mt-2">
               <ResponsiveContainer width="100%" height="100%">
@@ -332,15 +341,15 @@ export default function ManagerDashboard() {
 
       {/* Compliance / Status Tracking List */}
       {stats && (
-        <div className="bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800 rounded-3xl p-6 shadow-sm">
-          <h3 className="font-bold text-sm text-slate-805 dark:text-slate-200 font-display uppercase tracking-wider mb-4">
+        <div className="bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800 rounded-3xl p-6 shadow-premium">
+          <h3 className="font-bold text-sm text-slate-800 dark:text-slate-200 font-display uppercase tracking-wider mb-4">
             Team Submission Compliance Status
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
             {stats.memberStatuses.map((m) => (
               <div
                 key={m.userId}
-                className="p-4 bg-slate-50 dark:bg-slate-950 border border-slate-200/50 dark:border-slate-850 rounded-2xl flex items-center justify-between"
+                className="p-4 bg-slate-50 dark:bg-slate-950 border border-slate-200/50 dark:border-slate-800 rounded-2xl flex items-center justify-between"
               >
                 <div>
                   <h4 className="font-bold text-xs text-slate-800 dark:text-slate-100">{m.userName}</h4>
@@ -362,11 +371,11 @@ export default function ManagerDashboard() {
       )}
 
       {/* Reports Filter & Search Hub */}
-      <div className="bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800 rounded-3xl p-6 shadow-sm space-y-6">
+      <div className="bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800 rounded-3xl p-6 shadow-premium space-y-6">
         
         {/* Header */}
-        <div className="flex items-center justify-between pb-4 border-b border-slate-100 dark:border-slate-850">
-          <h3 className="font-bold text-sm text-slate-805 dark:text-slate-200 font-display uppercase tracking-wider flex items-center gap-1.5">
+        <div className="flex items-center justify-between pb-4 border-b border-slate-100 dark:border-slate-800">
+          <h3 className="font-bold text-sm text-slate-800 dark:text-slate-200 font-display uppercase tracking-wider flex items-center gap-1.5">
             <Filter className="w-4.5 h-4.5 text-slate-400" />
             Report Filter Hub
           </h3>
@@ -387,7 +396,7 @@ export default function ManagerDashboard() {
             <select
               value={filterMemberId}
               onChange={(e) => setFilterMemberId(e.target.value)}
-              className="w-full px-3 py-2 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-850 rounded-xl text-xs text-slate-800 dark:text-slate-100 outline-none"
+              className="w-full px-3 py-2 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl text-xs text-slate-800 dark:text-slate-100 outline-none"
             >
               <option value="">All Members</option>
               {members.map(m => (
@@ -402,7 +411,7 @@ export default function ManagerDashboard() {
             <select
               value={filterProjectId}
               onChange={(e) => setFilterProjectId(e.target.value)}
-              className="w-full px-3 py-2 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-850 rounded-xl text-xs text-slate-800 dark:text-slate-100 outline-none"
+              className="w-full px-3 py-2 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl text-xs text-slate-800 dark:text-slate-100 outline-none"
             >
               <option value="">All Projects</option>
               {projects.map(p => (
@@ -417,7 +426,7 @@ export default function ManagerDashboard() {
             <select
               value={filterStatus}
               onChange={(e) => setFilterStatus(e.target.value)}
-              className="w-full px-3 py-2 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-850 rounded-xl text-xs text-slate-800 dark:text-slate-100 outline-none"
+              className="w-full px-3 py-2 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl text-xs text-slate-800 dark:text-slate-100 outline-none"
             >
               <option value="">All Statuses</option>
               <option value="DRAFT">DRAFT</option>
@@ -432,7 +441,7 @@ export default function ManagerDashboard() {
               type="date"
               value={filterDateStart}
               onChange={(e) => setFilterDateStart(e.target.value)}
-              className="w-full px-3 py-2 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-850 rounded-xl text-xs text-slate-850 dark:text-slate-150 outline-none"
+              className="w-full px-3 py-2 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl text-xs text-slate-800 dark:text-slate-200 outline-none"
             />
           </div>
 
@@ -443,22 +452,22 @@ export default function ManagerDashboard() {
               type="date"
               value={filterDateEnd}
               onChange={(e) => setFilterDateEnd(e.target.value)}
-              className="w-full px-3 py-2 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-850 rounded-xl text-xs text-slate-855 dark:text-slate-150 outline-none"
+              className="w-full px-3 py-2 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl text-xs text-slate-800 dark:text-slate-200 outline-none"
             />
           </div>
         </div>
 
         {/* Reports Table / List */}
-        <div className="mt-6 border border-slate-150 dark:border-slate-850 rounded-2xl overflow-hidden">
+        <div className="mt-6 border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden">
           {teamReports.length === 0 ? (
-            <div className="text-center py-12 text-slate-450 dark:text-slate-550 text-xs">
+            <div className="text-center py-12 text-slate-400 dark:text-slate-500 text-xs">
               No reports match your filters.
             </div>
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full text-left border-collapse text-xs">
                 <thead>
-                  <tr className="bg-slate-50 dark:bg-slate-955 text-slate-400 border-b border-slate-150 dark:border-slate-850">
+                  <tr className="bg-slate-50 dark:bg-slate-900 text-slate-400 border-b border-slate-200 dark:border-slate-800">
                     <th className="p-3.5 font-bold uppercase tracking-wider">Member</th>
                     <th className="p-3.5 font-bold uppercase tracking-wider">Project</th>
                     <th className="p-3.5 font-bold uppercase tracking-wider">Week Range</th>
@@ -468,10 +477,10 @@ export default function ManagerDashboard() {
                     <th className="p-3.5 font-bold uppercase tracking-wider text-right">Actions</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-100 dark:divide-slate-850">
+                <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
                   {teamReports.map((rep) => (
-                    <tr key={rep.id} className="hover:bg-slate-50/45 dark:hover:bg-slate-955/20 transition-colors">
-                      <td className="p-3.5 font-semibold text-slate-850 dark:text-slate-200">
+                    <tr key={rep.id} className="hover:bg-slate-50/45 dark:hover:bg-slate-900/20 transition-colors">
+                      <td className="p-3.5 font-semibold text-slate-800 dark:text-slate-200">
                         {rep.userName}
                       </td>
                       <td className="p-3.5 text-slate-700 dark:text-slate-350">{rep.projectName}</td>
@@ -520,8 +529,8 @@ export default function ManagerDashboard() {
 
       {/* Recent Activity Feed */}
       {stats && (
-        <div className="bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800 rounded-3xl p-6 shadow-sm space-y-4">
-          <h3 className="font-bold text-sm text-slate-805 dark:text-slate-200 font-display uppercase tracking-wider">
+        <div className="bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800 rounded-3xl p-6 shadow-premium space-y-4">
+          <h3 className="font-bold text-sm text-slate-800 dark:text-slate-200 font-display uppercase tracking-wider">
             Recent Submissions Activity
           </h3>
           <div className="space-y-3">
@@ -529,10 +538,10 @@ export default function ManagerDashboard() {
               <p className="text-xs text-slate-400 text-center py-6">No recent submissions logged.</p>
             ) : (
               stats.recentActivities.map((act, i) => (
-                <div key={i} className="flex items-center justify-between text-xs p-3.5 bg-slate-50 dark:bg-slate-955 rounded-2xl">
+                <div key={i} className="flex items-center justify-between text-xs p-3.5 bg-slate-50 dark:bg-slate-900 rounded-2xl">
                   <div>
                     <span className="font-semibold text-slate-800 dark:text-slate-200">{act.userName}</span>
-                    <span className="text-slate-450 dark:text-slate-400 mx-1">submitted report for</span>
+                    <span className="text-slate-400 dark:text-slate-400 mx-1">submitted report for</span>
                     <span className="font-bold text-blue-600 dark:text-blue-400">{act.projectName}</span>
                   </div>
                   <span className="text-[10px] text-slate-400">{act.submittedAt}</span>
@@ -552,7 +561,7 @@ export default function ManagerDashboard() {
           <div className="w-full max-w-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 sm:p-8 shadow-2xl relative space-y-6">
             
             {/* Modal Header */}
-            <div className="flex items-center justify-between pb-4 border-b border-slate-100 dark:border-slate-850">
+            <div className="flex items-center justify-between pb-4 border-b border-slate-100 dark:border-slate-800">
               <div>
                 <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100 font-display">
                   Report Details: {selectedReportDetail.userName}
@@ -573,21 +582,21 @@ export default function ManagerDashboard() {
             <div className="space-y-4 text-xs">
               <div>
                 <strong className="text-slate-500 dark:text-slate-400 block mb-1">Project</strong>
-                <p className="p-3 bg-slate-50 dark:bg-slate-955 rounded-xl text-slate-800 dark:text-slate-250">
+                <p className="p-3 bg-slate-50 dark:bg-slate-900 rounded-xl text-slate-800 dark:text-slate-200">
                   {selectedReportDetail.projectName}
                 </p>
               </div>
 
               <div>
                 <strong className="text-slate-500 dark:text-slate-400 block mb-1">Tasks Completed</strong>
-                <p className="p-3 bg-slate-50 dark:bg-slate-955 rounded-xl text-slate-800 dark:text-slate-250 whitespace-pre-line leading-relaxed">
+                <p className="p-3 bg-slate-50 dark:bg-slate-900 rounded-xl text-slate-800 dark:text-slate-200 whitespace-pre-line leading-relaxed">
                   {selectedReportDetail.tasksCompleted}
                 </p>
               </div>
 
               <div>
                 <strong className="text-slate-500 dark:text-slate-400 block mb-1">Tasks Planned</strong>
-                <p className="p-3 bg-slate-50 dark:bg-slate-955 rounded-xl text-slate-800 dark:text-slate-250 whitespace-pre-line leading-relaxed">
+                <p className="p-3 bg-slate-50 dark:bg-slate-900 rounded-xl text-slate-800 dark:text-slate-200 whitespace-pre-line leading-relaxed">
                   {selectedReportDetail.tasksPlanned}
                 </p>
               </div>
@@ -596,8 +605,8 @@ export default function ManagerDashboard() {
                 <strong className="text-slate-500 dark:text-slate-400 block mb-1">Blockers / Challenges</strong>
                 <p className={`p-3 rounded-xl whitespace-pre-line leading-relaxed ${
                   selectedReportDetail.blockers && selectedReportDetail.blockers.toLowerCase() !== 'none'
-                    ? 'bg-red-50 dark:bg-red-950/20 text-red-700 dark:text-red-400 border border-red-105 dark:border-red-950'
-                    : 'bg-slate-50 dark:bg-slate-955 text-slate-800 dark:text-slate-250'
+                    ? 'bg-red-50 dark:bg-red-950/20 text-red-700 dark:text-red-400 border border-red-100 dark:border-red-950'
+                    : 'bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-200'
                 }`}>
                   {selectedReportDetail.blockers || 'None'}
                 </p>
@@ -606,13 +615,13 @@ export default function ManagerDashboard() {
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <strong className="text-slate-500 dark:text-slate-400 block mb-1">Hours Logged</strong>
-                  <p className="p-3 bg-slate-50 dark:bg-slate-955 rounded-xl text-slate-800 dark:text-slate-250 font-bold">
+                  <p className="p-3 bg-slate-50 dark:bg-slate-900 rounded-xl text-slate-800 dark:text-slate-200 font-bold">
                     {selectedReportDetail.hoursWorked !== null ? selectedReportDetail.hoursWorked : '-'}
                   </p>
                 </div>
                 <div>
                   <strong className="text-slate-500 dark:text-slate-400 block mb-1">Notes / References</strong>
-                  <p className="p-3 bg-slate-50 dark:bg-slate-955 rounded-xl text-slate-800 dark:text-slate-250 truncate">
+                  <p className="p-3 bg-slate-50 dark:bg-slate-900 rounded-xl text-slate-800 dark:text-slate-200 truncate">
                     {selectedReportDetail.notes ? (
                       selectedReportDetail.notes.startsWith('http') ? (
                         <a href={selectedReportDetail.notes} target="_blank" rel="noreferrer" className="text-blue-600 dark:text-blue-400 hover:underline">
@@ -628,7 +637,7 @@ export default function ManagerDashboard() {
             </div>
 
             {/* Modal Footer */}
-            <div className="flex justify-end pt-4 border-t border-slate-100 dark:border-slate-850">
+            <div className="flex justify-end pt-4 border-t border-slate-100 dark:border-slate-800">
               <button
                 onClick={() => setSelectedReportDetail(null)}
                 className="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-semibold rounded-xl transition"

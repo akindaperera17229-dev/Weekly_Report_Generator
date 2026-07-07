@@ -147,4 +147,11 @@ public class DashboardService {
                 .recentActivities(recentActs)
                 .build();
     }
+
+    @Transactional(readOnly = true)
+    public List<com.akinda.weekly_report_backend.dto.UserResponse> getTeamMembers() {
+        return userRepository.findByRole(Role.TEAM_MEMBER).stream()
+                .map(u -> new com.akinda.weekly_report_backend.dto.UserResponse(u.getId(), u.getName(), u.getEmail()))
+                .collect(Collectors.toList());
+    }
 }

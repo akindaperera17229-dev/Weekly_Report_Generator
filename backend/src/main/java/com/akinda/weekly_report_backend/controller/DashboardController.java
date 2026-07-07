@@ -19,4 +19,9 @@ public class DashboardController {
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate weekStart) {
         return dashboardService.getDashboardStats(weekStart);
     }
+
+    @GetMapping("/members")
+    public java.util.List<com.akinda.weekly_report_backend.dto.UserResponse> getTeamMembers() {
+        return dashboardService.getTeamMembers();
+    }
 }

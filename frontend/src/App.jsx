@@ -34,7 +34,13 @@ function ManagerLayout({ user, onLogout }) {
         
         {/* Sidebar Brand Header */}
         <div className="h-16 border-b border-slate-100 dark:border-slate-850 flex items-center gap-2 px-6">
-          <span className="text-2xl">📊</span>
+          <svg className="w-8 h-8 text-indigo-600 dark:text-indigo-400" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="3" y="3" width="7" height="9" rx="1.5" fill="currentColor" fillOpacity="0.15" stroke="currentColor" strokeWidth="2"/>
+            <rect x="14" y="3" width="7" height="5" rx="1.5" fill="currentColor" fillOpacity="0.15" stroke="currentColor" strokeWidth="2"/>
+            <rect x="3" y="16" width="7" height="5" rx="1.5" fill="currentColor" fillOpacity="0.15" stroke="currentColor" strokeWidth="2"/>
+            <rect x="14" y="12" width="7" height="9" rx="1.5" fill="currentColor" fillOpacity="0.15" stroke="currentColor" strokeWidth="2"/>
+            <path d="M7 10L10 7L13 10L17 6" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-indigo-500"/>
+          </svg>
           <span className="font-extrabold text-base text-slate-800 dark:text-slate-100 tracking-tight font-display">
             SISENCO Manager
           </span>

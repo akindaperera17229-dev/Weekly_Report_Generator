@@ -78,7 +78,14 @@ public class WeeklyReportService {
 
     @Transactional(readOnly = true)
     public List<WeeklyReportResponse> getFilteredReports(Long userId, Long projectId, LocalDate start, LocalDate end, String statusStr) {
-        ReportStatus status = statusStr != null ? ReportStatus.valueOf(statusStr) : null;
+        ReportStatus status = null;
+        if (statusStr != null && !statusStr.trim().isEmpty() && !statusStr.equalsIgnoreCase("null")) {
+            try {
+                status = ReportStatus.valueOf(statusStr.trim().toUpperCase());
+            } catch (IllegalArgumentException e) {
+                // Ignore invalid status mapping
+            }
+        }
         return weeklyReportRepository.findFilteredReports(userId, projectId, start, end, status)
                 .stream()
                 .map(WeeklyReportResponse::new)

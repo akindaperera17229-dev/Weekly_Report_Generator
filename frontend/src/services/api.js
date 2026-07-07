@@ -152,6 +152,12 @@ export const api = {
         headers: getHeaders(),
       });
       return handleResponse(res);
+    },
+    getMembers: async () => {
+      const res = await fetch(`${API_BASE}/dashboard/members`, {
+        headers: getHeaders(),
+      });
+      return handleResponse(res);
     }
   },
 
